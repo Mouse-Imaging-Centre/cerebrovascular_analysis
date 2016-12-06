@@ -21,7 +21,7 @@ import sys, os
 import string
 from sys import argv
 #from time import time, ctime
-import vessel_analysis
+from cerebrovascular_analysis import vessel_analysis
 import numpy as np
 
 
@@ -157,10 +157,10 @@ if __name__ == '__main__':
 
     graph_analysis.output_graph(output, g, history, attributes)
     
-    cmd=("\npython /projects/souris/sghanavati/src/scripts/cerebrovascular_analysis/graph2cylinder.py --use_label %s" %(output)) #python /micehome/jgsled/bin/
+    cmd=("graph2cylinder.py --use_label %s" %(output)) 
     os.system(cmd)
 
-    cmd=("\ngraph2obj.py %s %s" %(output,output[:-3]+".obj")) #python /micehome/jgsled/bin/
+    cmd=("graph2obj.py %s %s" %(output,output[:-3]+".obj")) 
     os.system(cmd)
     #s = shelve.open(output)
     #s['skeletal_graph'] = g

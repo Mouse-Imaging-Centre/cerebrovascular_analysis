@@ -7,7 +7,7 @@ import numpy as np
 from sys import argv
 import shelve, os, string
 from copy import deepcopy
-import vessel_analysis
+
 
         
         
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         del ref_attributes['history']
 
     graph_analysis.output_graph(options.output_name, ref, history, ref_attributes)
-    cmd=("\npython /micehome/sghanavati/Desktop/scripts/cerebrovascular_analysis/graph2cylinder.py --clobber --use_label %s" %(options.output_name)) #python /micehome/jgsled/bin/
+    cmd=("graph2cylinder.py --clobber --use_label %s" %(options.output_name)) #python /micehome/jgsled/bin/
     os.system(cmd)
         
    

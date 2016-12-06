@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from vessel_tracking import graph_analysis
-import vessel_analysis
+from cerebrovascular_analysis import vessel_analysis
 from optparse import OptionParser, Option, OptionValueError
 from sys import argv
 import os, shelve, string ,time,sys
@@ -104,10 +104,10 @@ if __name__ == '__main__':
 
         graph_analysis.output_graph(output_file, g, history, attributes)
         
-        cmd=("\ngraph2obj.py %s %s %s " %(output_file,output_file[:-3]+"obj", options.clobber)) #python /micehome/jgsled/bin/
+        cmd=("graph2obj.py %s %s %s " %(output_file,output_file[:-3]+"obj", options.clobber)) 
         os.system(cmd)
 
-        cmd=("\npython /projects/souris/sghanavati/src/scripts/cerebrovascular_analysis/graph2cylinder.py --use_label %s %s %s " %(output_file,output_file[:-3]+".h5", options.clobber)) #python /micehome/jgsled/bin/
+        cmd=("graph2cylinder.py --use_label %s %s %s " %(output_file,output_file[:-3]+".h5", options.clobber)) 
         os.system(cmd)
 
         num_seg = {}

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from vessel_tracking import graph_analysis
-import vessel_analysis
 from optparse import OptionParser, Option, OptionValueError
 from sys import argv
 import os, shelve, string ,time,sys

@@ -11,7 +11,7 @@ import numpy as np
 import scipy
 import copy
 import operator
-import vessel_analysis
+from cerebrovascular_analysis import vessel_analysis
 
 
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     graph_analysis.output_graph(output_file, g, history, attributes)
     
-    cmd=("\npython /projects/souris/sghanavati/src/scripts/cerebrovascular_analysis/graph2cylinder.py --use_label %s" %(output_file)) #python /micehome/jgsled/bin/
+    cmd=("graph2cylinder.py --use_label %s" %(output_file)) 
     os.system(cmd)
 
     

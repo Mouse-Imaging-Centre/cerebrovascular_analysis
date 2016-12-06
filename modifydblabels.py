@@ -138,7 +138,7 @@ if __name__ == '__main__':
     print ("Succefully wrote the %s\n" %output_file)
     sys.stdout.flush()
             
-    cmd=("\npython /projects/souris/sghanavati/src/scripts/cerebrovascular_analysis/graph2cylinder.py %s --use_label --clobber " %output_file)	
+    cmd=("graph2cylinder.py %s --use_label --clobber " %output_file)	
     os.system(cmd)
 
 

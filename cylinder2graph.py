@@ -197,12 +197,12 @@ if __name__ == '__main__':
 
 
     #cmd=("python /projects/souris/sghanavati/src/scripts/graph2graph_v2.py %s %s --clobber" %(input_file,input_file[:-3]+"graph2graph.db"))	#python /micehome/jgsled/bin/
-    cmd=("python /projects/souris/sghanavati/src/scripts/cerebrovascular_analysis/graph2graph_v2.py %s %s " %(input_file,input_file[:-3]+"graph2graph.db")) #python /micehome/jgsled/bin/
+    cmd=("graph2graph_v2.py %s %s " %(input_file,input_file[:-3]+"graph2graph.db")) 
     print(cmd)
     sys.stdout.flush()
     os.system(cmd)	
 
-    cmd=("python /projects/souris/sghanavati/src/scripts/cerebrovascular_analysis/modify_db_intermediaries.py %s %s %s" %(input_file[:-3]+"graph2graph.db",ref_graph,output_file[:-3]+"_nofeature.db" ))	#python /micehome/jgsled/bin/
+    cmd=("modify_db_intermediaries.py %s %s %s" %(input_file[:-3]+"graph2graph.db",ref_graph,output_file[:-3]+"_nofeature.db" ))	
     print(cmd)
     sys.stdout.flush()
     os.system(cmd)	

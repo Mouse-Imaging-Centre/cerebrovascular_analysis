@@ -99,10 +99,10 @@ if __name__ == '__main__':
 
     graph_analysis.output_graph(output_file, g, history, attributes)
     
-    cmd=("\npython /projects/souris/sghanavati/src/scripts/cerebrovascular_analysis/graph2cylinder.py --use_label %s" %(output_file)) #python /micehome/jgsled/bin/
+    cmd=("graph2cylinder.py --use_label %s" %(output_file)) 
     os.system(cmd)
 
-    cmd=("\ngraph2obj.py %s %s %s " %(output_file,output_file[:-3]+"obj", options.clobber)) #python /micehome/jgsled/bin/
+    cmd=("graph2obj.py %s %s %s " %(output_file,output_file[:-3]+"obj", options.clobber)) 
     os.system(cmd)
 
 

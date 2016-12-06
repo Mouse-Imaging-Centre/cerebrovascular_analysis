@@ -34,7 +34,7 @@ from scipy.linalg import norm
 from scipy.interpolate import splprep, splev, splrep
 from vessel_tracking import path_io
 from vessel_tracking import graph_analysis
-import vessel_analysis
+from cerebrovascular_analysis import vessel_analysis
 import copy
 
 program_name = 'summary_anatomical_label_calculations_to_csv.py'
