@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
 
     #### mri_distance feature:
-    cmd=("python /projects/souris/sghanavati/src/scripts/cerebrovascular_analysis/feature_MRI_labels.py %s %s %s --clobber" %(graph_file,mr_atlas_file, output_file))	#python /micehome/jgsled/bin/
+    cmd=("feature_MRI_labels.py %s %s %s --clobber" %(graph_file,mr_atlas_file, output_file))	
     print(cmd)
     sys.stdout.flush()
     os.system(cmd)	

@@ -783,12 +783,12 @@ def write_output_result(g,edge_w_indx,local_potentials,estimated_target_vector,t
             h.set_edge_property(e,'error_label',0)
     graph_analysis.output_graph(output_name, h, history, attributes)   
     
-    print ("Succefully wrote the %s\n" %output_name)
+    print ("Successfully wrote the %s\n" %output_name)
     
-    cmd=("\npython /projects/souris/sghanavati/src/scripts/graph2cylinder.py %s %s --use_estimated_label --clobber " %(output_name,output_name[:-3]+"_cyl.db"))	#python /micehome/jgsled/bin/
+    cmd=("graph2cylinder.py %s %s --use_estimated_label --clobber " %(output_name,output_name[:-3]+"_cyl.db"))	
     os.system(cmd)
 
-    cmd=("\npython /projects/souris/sghanavati/src/scripts/graph2cylinder.py %s %s --use_error_label --clobber " %(output_name,output_name[:-3]+"_error_cyl.db"))	#python /micehome/jgsled/bin/
+    cmd=("graph2cylinder.py %s %s --use_error_label --clobber " %(output_name,output_name[:-3]+"_error_cyl.db"))	
     os.system(cmd)
     
 
@@ -814,7 +814,7 @@ def write_posterior_prob_map(g,edge_w_indx, posterior_prob,target_vector, poster
     graph_analysis.output_graph(output_name, h, history, attributes)   
     print ("Succefully wrote the %s\n" %output_name)
 
-    cmd=("python /projects/souris/sghanavati/src/scripts/graph2cylinder.py %s %s --use_estimated_label --clobber " %(output_name,output_name[:-3]+"_cyl.db"))	#python /micehome/jgsled/bin/
+    cmd=("graph2cylinder.py %s %s --use_estimated_label --clobber " %(output_name,output_name[:-3]+"_cyl.db"))	
     #print(cmd)
     os.system(cmd)
 
@@ -837,9 +837,9 @@ def write_prior_prob_map(g,edge_w_indx, prior_prob,target_vector,labelNumerics, 
         else:
             h.set_edge_property(e,'estimated_label',[[0,0]])
     graph_analysis.output_graph(output_name, h, history, attributes)   
-    print ("Succefully wrote the %s\n" %output_name)
+    print ("Successfully wrote the %s\n" %output_name)
 
-    cmd=("python /projects/souris/sghanavati/src/scripts/graph2cylinder.py %s %s --use_estimated_label --clobber " %(output_name,output_name[:-3]+"_cyl.db"))	#python /micehome/jgsled/bin/
+    cmd=("graph2cylinder.py %s %s --use_estimated_label --clobber " %(output_name,output_name[:-3]+"_cyl.db"))	
     os.system(cmd)
    
     
