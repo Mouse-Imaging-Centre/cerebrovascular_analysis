@@ -29,13 +29,12 @@
 
 from vessel_tracking import graph_analysis
 from morphology import graph
-#from numpy import *
 from optparse import OptionParser, Option, OptionValueError
 from sys import argv
 import os, string
 import commands
 from time import time, ctime
-#import copy
+
 #---------------------------------------------------------------------------------
 #
 def delete_internal_leaves_jsome2jall(jall_name,jsome_name):
@@ -80,45 +79,42 @@ if __name__ == '__main__':
     parser.add_option("--clobber", action="store_true", dest="clobber",
                         default=0, help="overwrite output file")
     parser.add_option("--mask", type="string", dest="mask", help="mask graph with the given mask")
-    parser.add_option("--radi_correction",type="float",dest="radi_correction",default = 1.06,help="The radius correction factor for the vessel_tracking underestimated result, Defult=1.06")
-    parser.add_option("--del_leave_factor",type="float",dest="del_leave_factor",default = 1.0,help="scale vessel radii by given factor for delete_internal_leaves.py, Defult=1.0")
+    parser.add_option("--radi_correction",type="float",dest="radi_correction",default = 1.06,
+                      help="The radius correction factor for the vessel_tracking underestimated result, Defult=1.06")
+    parser.add_option("--del_leave_factor",type="float",dest="del_leave_factor",default = 1.0,
+                      help="scale vessel radii by given factor for delete_internal_leaves.py, Defult=1.0")
     parser.add_option("--offset", type="float", dest="offset", default = 0.06,
-                        help="add an offset to the vessel radii for delete_internal_leaves.py distance in mm(default 0.06)")
-    parser.add_option("--del_short_leaves",action="store_true",default = 0,dest="del_short_leaves",help="To use delete_short_leaves.py to delete vertices on short leaves (vessels from an endpoint)")
-    parser.add_option("--radius_threshold",type="float",dest="radius_threshold",default = 0.1,help="The threshold radius in mm for delete_short_leaves.py. Default value is 0.1mm")
-    parser.add_option("--length_threshold",type="float",dest="length_threshold",default = 0.2,help="The threshold length in mm for delete_short_leaves.py,Default is 0.2mm")
-    parser.add_option("--intermed_threshold",type="int",dest="intermed_threshold",default = 0,help="The threshold on number of intermediaries for delete_short_leaves.py. Recommended value is 100.")
-    parser.add_option("--smooth_vertex",action="store_true",default=0, dest="smooth_vertex",help="smooth graph by vertex property")
-    parser.add_option("--smooth_vertex_tol", type="float", dest="smooth_vertex_tol", default = 0.001, help="specify error tolerance per vertex in smoothed property [default: 0.001]")
-    parser.add_option("--smooth_radius",action="store_true",default=0, dest="smooth_radius",help="smooth graph by radius property")
-    parser.add_option("--smooth_radius_tol", type="float", dest="smooth_radius_tol", default = 1, help="specify error tolerance per vertex in smoothed property [default: 1]")
+                      help="add an offset to the vessel radii for delete_internal_leaves.py distance in mm(default 0.06)")
+    parser.add_option("--del_short_leaves",action="store_true",default = 0,dest="del_short_leaves",
+                      help="To use delete_short_leaves.py to delete vertices on short leaves (vessels from an endpoint)")
+    parser.add_option("--radius_threshold",type="float",dest="radius_threshold",default = 0.1,
+                      help="The threshold radius in mm for delete_short_leaves.py. Default value is 0.1mm")
+    parser.add_option("--length_threshold",type="float",dest="length_threshold",default = 0.2,
+                      help="The threshold length in mm for delete_short_leaves.py,Default is 0.2mm")
+    parser.add_option("--intermed_threshold",type="int",dest="intermed_threshold",default = 0,
+                      help="The threshold on number of intermediaries for delete_short_leaves.py. Recommended value is 100.")
+    parser.add_option("--smooth_vertex",action="store_true",default=0, dest="smooth_vertex",
+                      help="smooth graph by vertex property")
+    parser.add_option("--smooth_vertex_tol", type="float", dest="smooth_vertex_tol", default = 0.001, 
+                      help="specify error tolerance per vertex in smoothed property [default: 0.001]")
+    parser.add_option("--smooth_radius",action="store_true",default=0, dest="smooth_radius",
+                      help="smooth graph by radius property")
+    parser.add_option("--smooth_radius_tol", type="float", dest="smooth_radius_tol", default = 1, 
+                      help="specify error tolerance per vertex in smoothed property [default: 1]")
     #parser.add_option("--mask_minor",action="store_true",default=0,dest="mask_minor",help="mask minor vessels smaller than the diameter threshold, otherwise vessels are not masked ")
     #parser.add_option("--diameter_threshold",type="float",dest="diameter_threshold",default = 0.2,help="The threshold diameter for masking vessels, Defult=0.2")
     #parser.add_option("--length_threshold",type="float",dest="length_threshold",default = 0.5,help="The threshold length for masking shorter vessels from an endpoint, Defult=0.5")
-    parser.add_option("--remove_interms",action="store_true",default=0, dest="remove_interms",help="remove the intermediate mnc files that were created for calculating seeds in iterations")
-    parser.add_option("--simplify_graph",action="store_true",default=0, dest="simplify_graph",help="simplify graph to intermediaries and calculate diameter and length")
-    parser.add_option("--remove_isolated",action="store_true",default=0, dest="remove_isolated",help="remove isolated edges from the simplified graph to give a fully-connected graph")
+    parser.add_option("--remove_interms",action="store_true",default=0, dest="remove_interms",
+                      help="remove the intermediate mnc files that were created for calculating seeds in iterations")
+    parser.add_option("--simplify_graph",action="store_true",default=0, dest="simplify_graph",
+                      help="simplify graph to intermediaries and calculate diameter and length")
+    parser.add_option("--remove_isolated",action="store_true",default=0, dest="remove_isolated",
+                      help="remove isolated edges from the simplified graph to give a fully-connected graph")
                         
 
     options, args = parser.parse_args()
 
     print '>>> %s [%s]: %s\n' % (ctime(time()), os.getcwd(), string.join(argv))
-
-
-    #if len(args) != 1:
-        #parser.error("incorrect number of arguments")
-        
-    #print (args)	#list of str = ['inputname', 'outputname']
-
-    #if len(args) == 1:
-        #input_file = args[0]	 #eval: convert str to list	#input_file, output_file= args => input_file is list
-
-        #out1= input_file[:-2]+"db"
-        #out1=out1.replace('tree','graph')
-    #elif len(args) == 2:	
-        #input_file, out1 = args
-    #else:
-        #parser.error("incorrect number of arguments")
 
     if len(args)<2:
         parser.error("incorrect number of arguments")
@@ -138,23 +134,23 @@ if __name__ == '__main__':
         print out1
         # convert output of vessel_tracking.h5 to python pickeled object.db file
         out_jsome=out1[:-3]+"_jsome.db"
-        cmd=("tree2graph.py %s %s --join_some --clobber" %(input_file,out_jsome))	#python /micehome/jgsled/bin/
+        cmd=("tree2graph.py %s %s --join_some --clobber" %(input_file,out_jsome))	
         print(cmd)
         os.system(cmd)	
 
         # convert output of vessel_tracking.h5 to python pickeled object.db file
-        cmd=("tree2graph.py %s %s --join_all --clobber" %(input_file,out1))	#python /micehome/jgsled/bin/
+        cmd=("tree2graph.py %s %s --join_all --clobber" %(input_file,out1))
         print(cmd)
         os.system(cmd)	
 
         #mask graph
         if options.mask:
-            cmd=("mask_graph.py %s %s %s --negate --clobber" %(out_jsome,options.mask, out_jsome+"_masked.db"))	#python /micehome/jgsled/bin/
+            cmd=("mask_graph.py %s %s %s --negate --clobber" %(out_jsome,options.mask, out_jsome+"_masked.db"))	
             print(cmd)
             os.system(cmd)	
             out_jsome = out_jsome[:-3]+"_masked.db"
             
-            cmd=("mask_graph.py %s %s %s --negate --clobber" %(out1,options.mask, out1[:-3]+"_masked.db"))	#python /micehome/jgsled/bin/
+            cmd=("mask_graph.py %s %s %s --negate --clobber" %(out1,options.mask, out1[:-3]+"_masked.db"))	
             print(cmd)
             os.system(cmd)	
             out1 = out1[:-3]+"_masked.db"
@@ -162,7 +158,8 @@ if __name__ == '__main__':
 
         # delete internal leaves
         out2= out1[:-3]+"_delleave.db"
-        cmd=("python /projects/souris/sghanavati/src/scripts/cerebrovascular_analysis/delete_internal_leaves_sahar.py %s %s --scale %f --offset %f --clobber" %(out_jsome,out_jsome[:-3]+"_delleave.db", options.del_leave_factor, options.offset))	#python /micehome/jgsled/bin/
+        cmd=("delete_internal_leaves_sahar.py %s %s --scale %f --offset %f --clobber" % \
+                 (out_jsome,out_jsome[:-3]+"_delleave.db", options.del_leave_factor, options.offset))	
         print(cmd)
         os.system(cmd)
 
@@ -182,14 +179,15 @@ if __name__ == '__main__':
         os.system(cmd)  
         out2 = output_file[:-3]+"_merged.db"
         
-        cmd=("graph2obj.py --clobber %s %s" %(out2,out2[:-2]+"obj"))  #python /micehome/jgsled/bin/
+        cmd=("graph2obj.py --clobber %s %s" %(out2,out2[:-2]+"obj")) 
         print(cmd)
         os.system(cmd)
 
     # delete short leaves
     if options.del_short_leaves:
         out2= out2[:-3]+"_delshort.db"
-        cmd=("python /projects/souris/sghanavati/src/scripts/delete_short_leaves.py %s %s --radius_threshold %f --length_threshold %f --intermed_threshold %d --clobber" %(out1[:-3]+"_delleave.db",out2, options.radius_threshold, options.length_threshold, options.intermed_threshold))	#python /micehome/jgsled/bin/
+        cmd=("delete_short_leaves.py %s %s --radius_threshold %f --length_threshold %f --intermed_threshold %d --clobber" % \
+                 (out1[:-3]+"_delleave.db",out2, options.radius_threshold, options.length_threshold, options.intermed_threshold))	
         print(cmd)
         os.system(cmd)
 
@@ -222,23 +220,23 @@ if __name__ == '__main__':
     if options.smooth_vertex:
         smooth_input=out3
         out3=smooth_input[:-3]+"_smooth.db"
-        cmd=("smooth_graph.py --property centre --smooth %f %s %s --clobber" %(options.smooth_vertex_tol, smooth_input,out3)) #python /micehome/jgsled/bin/
+        cmd=("smooth_graph.py --property centre --smooth %f %s %s --clobber" %(options.smooth_vertex_tol, smooth_input,out3)) 
         print(cmd)
         os.system(cmd)
         
     if options.smooth_radius:
-        cmd=("smooth_graph.py --property radius --smooth %f --aggregate --isolate %s %s --clobber" %(options.smooth_radius_tol, out3, smooth_input[:-3]+"_smooth2.db")) #python /micehome/jgsled/bin/
+        cmd=("smooth_graph.py --property radius --smooth %f --aggregate --isolate %s %s --clobber" %(options.smooth_radius_tol, out3, smooth_input[:-3]+"_smooth2.db")) 
         print(cmd)
         os.system(cmd)
         out3=smooth_input[:-3]+"_smooth2.db"
 
     #save the object file of the corrected db file to check if it worked correctly	
-    cmd=("graph2obj.py --clobber %s %s" %(out3,out3[:-2]+"obj"))	#python /micehome/jgsled/bin/
+    cmd=("graph2obj.py --clobber %s %s" %(out3,out3[:-2]+"obj"))
     print(cmd)
     os.system(cmd)
 
     if options.simplify_graph:
-        cmnd = ("python /projects/souris/sghanavati/src/scripts/simplifygraph.py %s" %out3)
+        cmnd = ("simplify_graph.py %s" %out3)
         if options.clobber:
             cmnd += " --clobber"
         print  "\n", cmnd, "\n"
@@ -248,17 +246,17 @@ if __name__ == '__main__':
     if not options.simplify_graph and options.remove_isolated:
         raise SystemExit, ("--remove_isolated can only be used with --simplify_graph")
     elif options.simplify_graph and options.remove_isolated:
-        cmnd = ("python /projects/souris/sghanavati/src/scripts/remove_isolated_edges.py %s --layer" %(out3))
+        cmnd = ("remove_isolated_edges.py %s --layer" %(out3))
         print  "\n", cmnd, "\n"
         os.system(cmnd)
         out3 = out3[:-3]+"_rmisolate.db"
         
-        cmd=("graph2obj.py --clobber %s %s" %(out3,out3[:-3]+".obj"))	#python /micehome/jgsled/bin/
+        cmd=("graph2obj.py --clobber %s %s" %(out3,out3[:-3]+".obj"))	
         print(cmd)
         os.system(cmd)
         
     if len(input_files)==1:
-        cmd=("mv %s %s" %(out3,output_file))   #python /micehome/jgsled/bin/
+        cmd=("mv %s %s" %(out3,output_file))  
         print(cmd)
         os.system(cmd)
 
