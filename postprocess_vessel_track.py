@@ -33,15 +33,18 @@ from optparse import OptionParser, Option, OptionValueError
 from sys import argv
 import os, string
 import commands
+from subprocess import check_call
 from time import time, ctime
 
 #---------------------------------------------------------------------------------
 #
+
+
 def delete_internal_leaves_jsome2jall(jall_name,jsome_name):
     #disconnect vertices from g that are disconnect in h
     try:
         g, attributes = graph_analysis.input_graph(jall_name, ["history", "vertex_offsets"])
-        print ("Succefully read in the %s\n" %jall_name)	
+        print ("Successfully read in the %s\n" %jall_name)	
     except:
         print("Error reading in the %s\n" %jall_name)
 
@@ -71,7 +74,7 @@ program_name = 'postprocess_vessel_track.py'
 
 if __name__ == '__main__':
         
-    usage = "Usage: "+program_name+" [options] output_vessel_tracking_tree1.h5 output_vessel_tracking_tree2.h5 ... output_vessel_tracking_treeN.h5 output_file.db\n"+\
+    usage = "Usage: "+program_name+" [options] vessel_tracking_tree1.h5 vessel_tracking_tree2.h5 ... vessel_tracking_treeN.h5 output_file.db\n"+\
             "   or  "+program_name+" --help";
             
     parser = OptionParser(usage)
@@ -122,46 +125,50 @@ if __name__ == '__main__':
         input_files = args[:-1]
         output_file = args[-1]
 
+    output_directory = os.path.dirname(output_file)
+    print "Writing output files to: %s" % output_directory
     print output_file
-        
+    
+      
     if not options.clobber and os.path.exists(output_file):
         raise SystemExit, \
             "The --clobber option is needed to overwrite an existing file."
             
     out2s = []
     for input_file in input_files:
-        out1=input_file[:-2].replace('tree','graph')+"db"
+        out1_basename = os.path.splitext(os.path.basename(input_file))[0].replace('tree','graph')
+        out1=os.path.join(output_directory, out1_basename + ".db")
         print out1
         # convert output of vessel_tracking.h5 to python pickeled object.db file
-        out_jsome=out1[:-3]+"_jsome.db"
+        out_jsome=os.path.join(output_directory, out1_basename + "_jsome.db")
         cmd=("tree2graph.py %s %s --join_some --clobber" %(input_file,out_jsome))	
         print(cmd)
-        os.system(cmd)	
+        check_call(cmd, shell=True)	
 
         # convert output of vessel_tracking.h5 to python pickeled object.db file
         cmd=("tree2graph.py %s %s --join_all --clobber" %(input_file,out1))
         print(cmd)
-        os.system(cmd)	
+        check_call(cmd, shell=True)	
 
         #mask graph
         if options.mask:
             cmd=("mask_graph.py %s %s %s --negate --clobber" %(out_jsome,options.mask, out_jsome+"_masked.db"))	
             print(cmd)
-            os.system(cmd)	
+            check_call(cmd, shell=True)	
             out_jsome = out_jsome[:-3]+"_masked.db"
             
             cmd=("mask_graph.py %s %s %s --negate --clobber" %(out1,options.mask, out1[:-3]+"_masked.db"))	
             print(cmd)
-            os.system(cmd)	
+            check_call(cmd, shell=True)	
             out1 = out1[:-3]+"_masked.db"
 
 
         # delete internal leaves
-        out2= out1[:-3]+"_delleave.db"
+        out2=os.path.join(output_directory, out1_basename + "_delleave.db")
         cmd=("delete_internal_leaves_sahar.py %s %s --scale %f --offset %f --clobber" % \
                  (out_jsome,out_jsome[:-3]+"_delleave.db", options.del_leave_factor, options.offset))	
         print(cmd)
-        os.system(cmd)
+        check_call(cmd, shell=True)
 
         out2 = delete_internal_leaves_jsome2jall(out1,out_jsome[:-3]+"_delleave.db")
         out2s.append(out2)
@@ -176,12 +183,12 @@ if __name__ == '__main__':
             cmd+=" %s" %out2
         cmd+= " %s" %output_file[:-3]+"_merged.db"
         print(cmd)
-        os.system(cmd)  
+        check_call(cmd, shell=True)  
         out2 = output_file[:-3]+"_merged.db"
         
         cmd=("graph2obj.py --clobber %s %s" %(out2,out2[:-2]+"obj")) 
         print(cmd)
-        os.system(cmd)
+        check_call(cmd, shell=True)
 
     # delete short leaves
     if options.del_short_leaves:
@@ -189,14 +196,14 @@ if __name__ == '__main__':
         cmd=("delete_short_leaves.py %s %s --radius_threshold %f --length_threshold %f --intermed_threshold %d --clobber" % \
                  (out1[:-3]+"_delleave.db",out2, options.radius_threshold, options.length_threshold, options.intermed_threshold))	
         print(cmd)
-        os.system(cmd)
+        check_call(cmd, shell=True)
 
 
 
     # reads in the graph for adjust junction and radi corrections
     try:
         g, attributes = graph_analysis.input_graph(out2, ["history", "vertex_offsets"])
-        print ("Succefully read in the %s\n" %out2)	
+        print ("Successfully read in the %s\n" %out2)	
     except:
         print("Error reading in the %s\n" %out2)
         
@@ -222,18 +229,18 @@ if __name__ == '__main__':
         out3=smooth_input[:-3]+"_smooth.db"
         cmd=("smooth_graph.py --property centre --smooth %f %s %s --clobber" %(options.smooth_vertex_tol, smooth_input,out3)) 
         print(cmd)
-        os.system(cmd)
+        check_call(cmd, shell=True)
         
     if options.smooth_radius:
         cmd=("smooth_graph.py --property radius --smooth %f --aggregate --isolate %s %s --clobber" %(options.smooth_radius_tol, out3, smooth_input[:-3]+"_smooth2.db")) 
         print(cmd)
-        os.system(cmd)
+        check_call(cmd, shell=True)
         out3=smooth_input[:-3]+"_smooth2.db"
 
     #save the object file of the corrected db file to check if it worked correctly	
     cmd=("graph2obj.py --clobber %s %s" %(out3,out3[:-2]+"obj"))
     print(cmd)
-    os.system(cmd)
+    check_call(cmd, shell=True)
 
     if options.simplify_graph:
         cmnd = ("simplify_graph.py %s" %out3)
@@ -253,12 +260,12 @@ if __name__ == '__main__':
         
         cmd=("graph2obj.py --clobber %s %s" %(out3,out3[:-3]+".obj"))	
         print(cmd)
-        os.system(cmd)
+        check_call(cmd, shell=True)
         
     if len(input_files)==1:
         cmd=("mv %s %s" %(out3,output_file))  
         print(cmd)
-        os.system(cmd)
+        check_call(cmd, shell=True)
 
         
     if options.remove_interms:

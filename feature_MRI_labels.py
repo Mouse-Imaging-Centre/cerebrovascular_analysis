@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #  Created July 16, 2012
 #  Last modified Nov 16, 2012 
 #  Sahar Ghanavati
@@ -57,7 +58,7 @@ if __name__ == '__main__':
 
     try:
         g, attributes = graph_analysis.input_graph(graph_file, ["history", "vertex_offsets"])  	# open graph data and copy contents to memory
-        print ("Succefully read in the %s\n" %graph_file)	
+        print ("Successfully read in the %s\n" %graph_file)	
         sys.stdout.flush()
     except:
         print("Error reading in the %s \n" %graph_file)
@@ -111,5 +112,5 @@ if __name__ == '__main__':
         
     graph_analysis.output_graph(output_file, g, history, attributes)   
     
-    print ("Succefully wrote the %s\n" %output_file)
+    print ("Successfully wrote the %s\n" %output_file)
     

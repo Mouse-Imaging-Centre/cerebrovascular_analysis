@@ -42,6 +42,7 @@ from optparse import OptionParser, Option, OptionValueError
 from minc_util.progress import progress_report
 from sys import argv
 import os, shelve, string,sys
+from subprocess import check_call
 import commands
 import copy
 import time
@@ -106,12 +107,12 @@ if __name__ == '__main__':
     cmd=("feature_MRI_labels.py %s %s %s --clobber" %(graph_file,mr_atlas_file, output_file))	
     print(cmd)
     sys.stdout.flush()
-    os.system(cmd)	
+    check_call(cmd, shell=True)	
     
 
     try:
         g, attributes = graph_analysis.input_graph(output_file, ["history", "vertex_offsets"])  	# open graph data and copy contents to memory
-        print ("Succefully read in the %s\n" %graph_file)	
+        print ("Successfully read in the %s\n" %graph_file)	
         sys.stdout.flush()
     except:
         print("Error reading in the %s \n" %graph_file)
@@ -176,7 +177,7 @@ if __name__ == '__main__':
     #### calculate the angles with references		
     try:
         ref, ref_attributes = graph_analysis.input_graph(dir_reference_file, ["history", "vertex_offsets"])  	# open graph data and copy contents to memory
-        print ("Succefully read in the cba_vasculature_dir_reference_file.db\n")
+        print ("Successfully read in the cba_vasculature_dir_reference_file.db\n")
         sys.stdout.flush()
     except:
         print("Error reading in the cba_vasculature_dir_reference_file.db\n")
@@ -295,7 +296,7 @@ if __name__ == '__main__':
         
     graph_analysis.output_graph(output_file, g, history, attributes)   
     
-    print ("Succefully wrote the %s\n" %output_file)
+    print ("Successfully wrote the %s\n" %output_file)
     sys.stdout.flush()
         
         
